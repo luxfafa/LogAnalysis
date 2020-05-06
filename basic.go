@@ -1,17 +1,24 @@
 package main
 
-var (
-	LogFilePath = `nginx.access.log`
-	countUrlCh   = make(chan string, 50000)
-)
-
 type UrlSortSlice []UrlForSort
 
-type UrlForSort struct {
-	Often int // Url出现的次数
-	Url   string // Nginx日志中筛选出的url
+var (
+	// LogFilePath = `nginx.access.log`
+	buflen      = 50000
+	LogFilePath = `E:\project_all\go_test\www.csit18.com.access.log`
+)
+
+type CountAndExport struct {
+	LogPath         string // 日志绝对路径
+	cancel          func()
+	lineCh          chan string   // 接收单行处理过的日志
+	cancelCh        chan struct{} // 接收日志存取完毕的讯号
+	countUrlCh      chan string
+	countMap        map[string]int
+	urlForSortSlice UrlSortSlice
 }
 
-func (s UrlSortSlice) Len() int { return len(s) }
-func (s UrlSortSlice) Swap(i, j int) { s[i], s[j] = s[j], s[i] }
-func (s UrlSortSlice) Less(i, j int) bool { return s[i].Often < s[j].Often }
+type UrlForSort struct {
+	Often int    // Url出现的次数
+	Url   string // Nginx日志中筛选出的url
+}
