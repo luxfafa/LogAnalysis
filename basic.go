@@ -3,9 +3,8 @@ package main
 type UrlSortSlice []UrlForSort
 
 var (
-	// LogFilePath = `nginx.access.log`
+	LogFilePath = `nginx.access.log`
 	buflen      = 50000
-	LogFilePath = `E:\project_all\go_test\www.csit18.com.access.log`
 )
 
 type CountAndExport struct {
